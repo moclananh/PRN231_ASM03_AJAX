@@ -1,0 +1,52 @@
+﻿
+
+<div class="container-fluid">
+    <h2>Product List</h2>
+    <form id="createProductForm">
+        <div class="form-group">
+            <label for="categoryName">Category Name:</label>
+            <input type="text" id="categoryName" name="categoryName" class="form-control" required>
+        </div>
+     
+        <button type="submit" class="btn btn-primary">Create</button>
+
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+      
+        $("#createProductForm").submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            var formData = {
+                categoryName: $("#categoryName").val()
+               
+            };
+
+            $.ajax({
+                url: "https://localhost:5001/api/Categories",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function (result, status, xhr) {
+                    // Handle the success, e.g., add the new product to the table
+                    window.location.href = "https://localhost:5002/Categories";
+                    ShowAllProducts();
+                    // Clear the form fields
+                    $("#productName").val("");
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                    alert("Error creating the product.");
+                }
+            });
+        });
+    });
+
+</script>

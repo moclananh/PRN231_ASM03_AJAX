@@ -1,0 +1,227 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<div class="container-fluid">
+    <h2> Product List</h2>
+    <table class="table table-sm table-striped table-bordered m-2"> 
+        <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Category Name</th>
+                <th>Product Name</th>
+                <th>Weight</th>
+                <th>UnitPrice</th>
+                <th>UnitInStock</th>
+                <th>Update</th>
+                <th>Delete</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        ShowAllProducts();
+
+        function ShowAllProducts() {
+            $("table tbody").html("");
+            $.ajax({
+                url: "https://localhost:5001/api/Products",
+                type: "get",
+                contentType: "json",
+                dataType: "json",
+                success: function (result, status, xhr) {
+                    $.each(result, function (index, value) {
+
+                        var categoryId = value["categoryId"];
+                        var categoryName = getCategoryName(categoryId);
+
+                        $("tbody").append($("<tr>"));
+                        appendElement = $("tbody tr").last();
+                        appendElement.append($("<td>").html(value["productId"]));
+                        appendElement.append($("<td>").html(categoryName));
+                        appendElement.append($("<td>").html(value["productName"]));
+                        appendElement.append($("<td>").html(value["weight"]));
+                        appendElement.append($("<td>").html(value["unitPrice"]));
+                        appendElement.append($("<td>").html(value["unitInStock"]));
+                        appendElement.append($("<td>").html("<button class='edit btn btn-primary' data-toggle='modal' data-target='#editModal'>Edit</button>"));
+                        appendElement.append($("<td>").html("<a href=\"javascript:void(0);\" class=\"delete-link\" data-id=\"" + value["productId"] + "\">Delete</a>"));
+                        $("tbody").append(appendElement);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                }
+            });
+        }
+
+        //display all category
+        // Function to get category name based on categoryId
+        function getCategoryName(categoryId) {
+            var categoryName = "";
+            $.ajax({
+                async: false,
+                url: "https://localhost:5001/api/Categories/" + categoryId,
+                type: "get",
+                success: function (data) {
+                    categoryName = data.categoryName;
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                }
+            });
+            return categoryName;
+        }
+
+        function loadCategories() {
+            $.ajax({
+                url: "https://localhost:5001/api/Categories",
+                type: "get",
+                success: function (data) {
+                    var categoryDropdown = $("#categoryDropdown");
+
+                    // Clear existing options
+                    categoryDropdown.empty();
+
+                    // Populate the dropdown with category names and IDs
+                    data.forEach(function (category) {
+                        categoryDropdown.append(
+                            $("<option>")
+                                .val(category.categoryId)
+                                .text(category.categoryName)
+                        );
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                    alert("Error loading categories.");
+                }
+            });
+        }
+
+        //delete
+        $(document).on("click", ".delete-link", function () {
+            var deleteLink = $(this); // Capture the reference to the clicked delete link
+            var productId = deleteLink.data("id");
+            if (confirm("Are you sure you want to delete this product?")) {
+                // Perform the delete action here using an AJAX request
+                $.ajax({
+                    url: "https://localhost:5001/api/Products/" + productId,
+                    type: "delete",
+                    success: function (result) {
+                        // Handle the success, e.g., remove the deleted row from the table
+                        deleteLink.closest("tr").remove(); // Use the captured reference here
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr);
+                        alert("Error deleting the product.");
+                    }
+                });
+            }
+        });
+
+        //edit
+        $("table").on("click", "button.edit", function () {
+            var row = $(this).closest("tr");
+            var productId = row.find("td:nth-child(1)").text();
+            var categoryId = row.find("td:nth-child(2)").text();
+            var productName = row.find("td:nth-child(3)").text();
+            var weight = row.find("td:nth-child(4)").text();
+            var unitPrice = row.find("td:nth-child(5)").text();
+            var unitInStock = row.find("td:nth-child(6)").text();
+            
+           
+
+            // Populate the modal form for editing 
+            $("#editModal").find("input[name='productId']").val(productId);
+            $("#categoryDropdown").val(loadCategories); // Reset category selection
+            $("#editModal").find("input[name='productName']").val(productName);
+            $("#editModal").find("input[name='weight']").val(weight);
+            $("#editModal").find("input[name='unitPrice']").val(unitPrice);
+            $("#editModal").find("input[name='unitInStock']").val(unitInStock);
+           
+        });
+
+        // Handle the edit form submission
+        $("#editModal").on('submit', 'form#editForm', function (e) {
+            e.preventDefault();
+            var productId = $(this).find("input[name='productId']").val();
+            var updatedProduct = {
+                productId: productId,
+                categoryId: $("#categoryDropdown").val(),
+                productName: $(this).find("input[name='productName']").val(),
+                weight: $(this).find("input[name='weight']").val(),
+                unitPrice: $(this).find("input[name='unitPrice']").val(),
+                unitInStock: $(this).find("input[name='unitInStock']").val()  
+            };
+
+            // Send an AJAX request to update the product
+            $.ajax({
+                url: "https://localhost:5001/api/Products/" + productId,
+                type: "put",
+                contentType: "application/json",
+                data: JSON.stringify(updatedProduct),
+                success: function (result, status, xhr) {
+                    window.location.href = "https://localhost:5002/Products";
+                    ShowAllProducts();
+                    $('#editModal').modal('hidden');
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
+                }
+            });
+        });
+    });
+</script>
+
+
+<!-- Modal for Editing -->
+<div class="modal" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" id="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" name="productId">
+                    <div class="form-group">
+                        <label for="categoryId">Category:</label>
+                        <select id="categoryDropdown" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" name="productName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight</label>
+                        <input type="text" name="weight" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="unitPrice">Unit Price</label>
+                        <input type="text" name="unitPrice" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="unitInStock">unit in Stock</label>
+                        <input type="text" name="unitInStock" class="form-control">
+                    </div>
+                  
+                    <button type="submit" form="editForm" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
