@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.Extensions.DependencyInjection;
+@{
+    var userManage = Context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+    var signInManage = Context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+    var currentUser = userManage.GetUserAsync(User).Result;
+
     ViewData["Title"] = "Index";
    
 }
@@ -59,4 +65,3 @@
         }
     });
 </script>
-

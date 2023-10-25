@@ -10,6 +10,7 @@ namespace DataAccess.IRepositories
     public interface IOrderRespository
     {
         List<Order> GetOrders();
+        List<Order> GetOrderByMemberId(string id);
 
         void DeleteOrder(int idO);
 

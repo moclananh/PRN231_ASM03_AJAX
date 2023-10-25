@@ -19,6 +19,8 @@ namespace DataAccess.Repositories
 
         public Order GetOrder(int id) => OrderDAO.Instance.GetOrderByID(id);
 
+        public List<Order> GetOrderByMemberId(string id) => OrderDAO.Instance.GetOrderByMemberId(id);
+        
 
         public List<Order> GetOrders() => OrderDAO.Instance.GetOrders();
 

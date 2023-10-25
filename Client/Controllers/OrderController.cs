@@ -13,6 +13,11 @@ namespace Client.Controllers
             return View();
         }
 
+        public ActionResult GetOrdersByMemberId(string id)
+        {
+            return View();
+        }
+
         // GET: OrderController/Details/5
         public ActionResult Details(int id)
         {

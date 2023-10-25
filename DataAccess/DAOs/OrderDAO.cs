@@ -55,6 +55,23 @@ namespace DataAccess.DAOs
             }
             return or;
         }
+
+        public List<Order> GetOrderByMemberId(string id)
+        {
+            var or = new List<Order>();
+            try
+            {
+                using var context = new PRN231_ASM03_AJAXContext();
+                or = context.Orders.Where(m => m.MemberId == id).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return or;
+        }
+
         public void AddOrder(Order order)
         {
             try

@@ -208,3 +208,4 @@ D:\FU_Hub\FA23\PRN231\Asm\PRN231_ASM03_AJAX\Client\obj\Debug\net5.0\Razor\Views\
 D:\FU_Hub\FA23\PRN231\Asm\PRN231_ASM03_AJAX\Client\obj\Debug\net5.0\Razor\Views\Categories\Create.cshtml.g.cs
 D:\FU_Hub\FA23\PRN231\Asm\PRN231_ASM03_AJAX\Client\obj\Debug\net5.0\Razor\Views\Order\Index.cshtml.g.cs
 D:\FU_Hub\FA23\PRN231\Asm\PRN231_ASM03_AJAX\Client\obj\Debug\net5.0\Razor\Views\Order\Create.cshtml.g.cs
+D:\FU_Hub\FA23\PRN231\Asm\PRN231_ASM03_AJAX\Client\obj\Debug\net5.0\Razor\Views\Order\GetOrdersByMemberId.cshtml.g.cs

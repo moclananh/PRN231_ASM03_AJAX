@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.Extensions.DependencyInjection;
+@{
+    var userManage = Context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+    var signInManage = Context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+    var currentUser = userManage.GetUserAsync(User).Result;
+    var adminId = "6d205ecd-3e74-4709-ba9c-d0fddac8520c";
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Form nhập ngày</title>
@@ -37,15 +46,21 @@
     </style>
 </head>
 <body>
-    <form>
-        <label for="startDate">Ngày bắt đầu:</label>
-        <input type="date" id="startDate" name="startDate" required>
+    @if (currentUser.Id == adminId)
+    {
+        <form>
+            <label for="startDate">Ngày bắt đầu:</label>
+            <input type="date" id="startDate" name="startDate" required>
 
-        <label for="endDate">Ngày kết thúc:</label>
-        <input type="date" id="endDate" name="endDate" required>
+            <label for="endDate">Ngày kết thúc:</label>
+            <input type="date" id="endDate" name="endDate" required>
 
-        <button type="button" onclick="getStatisticalData()" class="btn btn-primary">Send</button>
-    </form>
+            <button type="button" onclick="getStatisticalData()" class="btn btn-primary">Send</button>
+        </form>
+    }else{
+        <h2>You are not permission to use this function</h2>
+    }
+
 
     <!-- Bảng để hiển thị dữ liệu từ API -->
     <table id="data-table">

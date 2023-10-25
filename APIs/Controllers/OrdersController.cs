@@ -24,6 +24,18 @@ namespace APIs.Controllers
             return repository.GetOrders();
         }
 
+        [HttpGet("GetOrdersByMemberId/{id}")]
+        public ActionResult<IEnumerable<Order>> GetOrdersByMemberId(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var result = repository.GetOrderByMemberId(id);
+            return result;
+        }
+
         // GET: api/Orders/5
         [HttpGet("{id}")]
         public ActionResult<Order> GetOrder(int id)
