@@ -1,23 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@using Microsoft.Extensions.DependencyInjection;
-@{
-    var userManage = Context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
-    var signInManage = Context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
-    var currentUser = userManage.GetUserAsync(User).Result;
-    var adminId = "6d205ecd-3e74-4709-ba9c-d0fddac8520c";
-}
-@if (currentUser.Id == adminId)
-{
+﻿
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </p>
-}
-else
-{
-    <p>
-        <a asp-action="Create" class="btn btn-primary" hidden>Create New</a>
-    </p>
-}
+
 <div class="container-fluid">
     <h2> Category List</h2>
     <table class="table table-sm table-striped table-bordered m-2">
@@ -39,9 +24,11 @@ else
 
 <script type="text/javascript">
     $(document).ready(function () {
+       
         ShowAllCategories();
 
         function ShowAllCategories() {
+              var isAdmin = '@(User.IsInRole("Admin")?"true":"false")';
             $("table tbody").html("");
             $.ajax({
                 url: "https://localhost:5001/api/Categories",
@@ -54,8 +41,11 @@ else
                         appendElement = $("tbody tr").last();
                         appendElement.append($("<td>").html(value["categoryId"]));
                         appendElement.append($("<td>").html(value["categoryName"]));
-                        appendElement.append($("<td>").html("<button class='edit btn btn-primary' data-toggle='modal' data-target='#editModal'>Edit</button>"));
-                        appendElement.append($("<td>").html("<button class='delete btn btn-primary' data-toggle='modal' data-target='#deleteModal'>Delete</button>"));
+                        if(isAdmin == "true"){
+                             appendElement.append($("<td>").html("<button class='edit btn btn-primary' data-toggle='modal' data-target='#editModal'>Edit</button>"));
+                              appendElement.append($("<td>").html("<button class='delete btn btn-primary' data-toggle='modal' data-target='#deleteModal'>Delete</button>"));
+
+                        }
                         $("tbody").append(appendElement);
                     });
                 },
@@ -157,17 +147,8 @@ else
             <form id="deleteForm">
                 <input type="hidden" name="categoryId">
                 <div class="modal-footer">
-
-                    @if (currentUser.Id == adminId)
-                    {
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
-                    }
-                    else
-                    {
-
-                        <button type="submit" form="deleteForm" class="btn btn-primary" disabled>You not permission</button>
-                    }
                 </div>
             </form>
 
@@ -194,16 +175,7 @@ else
                         <label for="categoryName">Category Name</label>
                         <input type="text" name="categoryName" class="form-control">
                     </div>
-
-                    @if (currentUser.Id == adminId)
-                    {
                         <button type="submit" form="editForm" class="btn btn-primary">Save Changes</button>
-                    }
-                    else
-                    {
-
-                        <button type="submit" form="editForm" class="btn btn-primary" disabled>You not permission</button>
-                    }
                 </form>
             </div>
         </div>

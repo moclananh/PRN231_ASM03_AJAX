@@ -24,11 +24,9 @@
         <label for="requireDate">Ngày yêu cầu giao hàng:</label>
         <input type="date" id="requireDate" name="requireDate">
 
-        <label for="shippedDate">Ngày giao hàng:</label>
-        <input type="date" id="shippedDate" name="shippedDate">
+         <input type="hidden" id="shippedDate" name="shippedDate" value="">
 
-        <label for="freight">Phí vận chuyển:</label>
-        <input type="number" id="freight" name="freight">
+          <input type="hidden" id="freight" name="freight" value="200">
 
         <button type="button" id="create-order-button">Tạo Đơn Đặt Hàng</button>
     </form>
@@ -43,6 +41,12 @@
             // Lấy thời gian thực tế cho orderDate
             var orderDate = new Date().toISOString();
 
+            // Tính shippedDate bằng cách thêm 7 ngày vào orderDate
+            var orderDateObj = new Date(orderDate);
+            var shippedDateObj = new Date(orderDateObj);
+            shippedDateObj.setDate(orderDateObj.getDate() + 7);
+
+          
             // Lấy memberId từ server
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/User/GetUserId", true);
@@ -55,7 +59,7 @@
                         "memberId": memberId,
                         "orderDate": orderDate,
                         "requireDate": requireDate,
-                        "shippedDate": shippedDate,
+                        "shippedDate": shippedDateObj,
                         "freight": freight
                     };
 
@@ -70,7 +74,7 @@
                             if (xhrCreateOrder.status === 201) {
                                 // Xử lý khi đơn đặt hàng đã được tạo thành công
                                 console.log("Đơn đặt hàng đã được tạo.");
-                                window.location.href = "https://localhost:5002/Order";
+                                window.location.href = "https://localhost:5002/Order/GetOrdersByMemberId";
                             } else {
                                 // Xử lý khi tạo đơn đặt hàng thất bại
                                 console.log("Tạo đơn đặt hàng thất bại.");

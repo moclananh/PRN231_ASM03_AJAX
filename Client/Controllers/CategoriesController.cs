@@ -20,6 +20,7 @@ namespace Client.Controllers
         }
 
         // GET: CategoriesController/Create
+        [Authorize(policy: "Admin")]
         public ActionResult Create()
         {
             return View();

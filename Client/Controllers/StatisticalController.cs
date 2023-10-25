@@ -8,6 +8,7 @@ namespace Client.Controllers
     public class StatisticalController : Controller
     {
         // GET: StatisticalController
+        [Authorize(policy:"Admin")]
         public ActionResult Index()
         {
             return View();

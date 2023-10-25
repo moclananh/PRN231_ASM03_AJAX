@@ -8,6 +8,7 @@ namespace Client.Controllers
     public class OrderController : Controller
     {
         // GET: OrderController
+        [Authorize(policy:"Admin")]
         public ActionResult Index()
         {
             return View();

@@ -31,6 +31,7 @@ namespace Client.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(policy:"Admin")]
         public IActionResult Create()
         {
 

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
     @*add lib here*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   
+
 </head>
 <body>
     <header>
@@ -44,24 +44,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                         </li>
-                      
-                        @if (currentUser.Id == adminId)
+                          
+                        @if (currentUser != null)
                         {
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Manage Order</a>
-                            </li>
-                              <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistical" asp-action="Index">Statistical</a>
-                        </li>
-                        }
-                        else
-                        {
+                             @if (currentUser.Id == adminId)
+                            {
                              <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="GetOrdersByMemberId">Customer Order</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Manage Order</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Statistical" asp-action="Index">Statistical</a>
+                            </li>
+                            }else{
+                                  <li class="nav-item">
+                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="GetOrdersByMemberId">Customer Order</a>
+                                 </li>
+                            }
                         }
-
-                       
+                      
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -83,8 +83,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-     <script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
-   <script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script>
         $(document).ready(function () {
