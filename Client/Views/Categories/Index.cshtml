@@ -1,8 +1,11 @@
 ﻿
+@if (User.IsInRole("Admin"))
+{
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </p>
-
+}
+   
 <div class="container-fluid">
     <h2> Category List</h2>
     <table class="table table-sm table-striped table-bordered m-2">
@@ -10,9 +13,12 @@
             <tr>
                 <th>Category Id</th>
                 <th>Category Name</th>
-                <th>Update</th>
-                <th>Delete</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Update</th>
+                    <th>Delete</th>
 
+                }
             </tr>
         </thead>
         <tbody></tbody>

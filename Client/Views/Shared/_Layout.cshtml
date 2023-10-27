@@ -4,7 +4,7 @@
     var userManage = Context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
     var signInManage = Context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
     var currentUser = userManage.GetUserAsync(User).Result;
-    var adminId = "6d205ecd-3e74-4709-ba9c-d0fddac8520c";
+   
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -38,30 +38,39 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                        </li>
-                          
+
                         @if (currentUser != null)
                         {
-                             @if (currentUser.Id == adminId)
+                            @if (User.IsInRole("Admin"))
                             {
-                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Manage Order</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Statistical" asp-action="Index">Statistical</a>
-                            </li>
-                            }else{
-                                  <li class="nav-item">
-                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="GetOrdersByMemberId">Customer Order</a>
-                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Manage Order</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Statistical" asp-action="Index">Statistical</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="GetOrdersByMemberId">Customer Order</a>
+                                </li>
                             }
                         }
-                      
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

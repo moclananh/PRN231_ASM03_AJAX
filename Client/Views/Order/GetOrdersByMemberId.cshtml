@@ -51,7 +51,6 @@
                 <th>Require Date</th>
                 <th>Shipped Date</th>
                 <th>Freight</th>
-              
             </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -83,8 +82,6 @@
                         cell5.innerHTML = order.shippedDate;
                         var cell6 = row.insertCell(5);
                         cell6.innerHTML = order.freight;
-                        var cell7 = row.insertCell(6);
-                        cell7.innerHTML = order.member; 
                     });
                 })
                 .catch(error => {
