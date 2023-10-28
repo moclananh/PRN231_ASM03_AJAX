@@ -5,6 +5,7 @@ AJAX PROJECT
 - CRUD Category
 - Create/View all Order
 - Statistical
+- Full Authoz
 2. Not Yet
 - Order Details
-- Authori
+
